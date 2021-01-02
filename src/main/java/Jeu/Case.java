@@ -9,6 +9,7 @@ import java.awt.geom.Ellipse2D;
 
 public class Case extends JFrame {
     static int compteurCase = 0;
+    private boolean estGrise;
     private int x;
     private int y;
     private int numCase;
@@ -17,6 +18,15 @@ public class Case extends JFrame {
     {
         this.x = x;
         this.y = y;
+        compteurCase =+1;
+        this.numCase = compteurCase;
+    }
+
+    public Case(int x, int y, boolean g)
+    {
+        this.x = x;
+        this.y = y;
+        this.estGrise = g;
         compteurCase =+1;
         this.numCase = compteurCase;
     }
