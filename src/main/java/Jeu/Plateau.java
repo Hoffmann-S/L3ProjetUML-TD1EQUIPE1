@@ -9,27 +9,51 @@ import javax.swing.JPanel;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
 
 
-public class Plateau extends JPanel{
+public class Plateau extends JPanel {
 
     private BufferedImage image;
     static Plateau uniqueInstance = new Plateau();
+    public static int[][] generationPlateau;
     public static Case[][] casePlateau;
 
-    private Plateau(){
+    private Plateau() {
 
     }
 
-    public static Plateau getInstance()
-    {
+    public static Plateau getInstance() {
         return uniqueInstance;
     }
 
-    private Case getCase(int x,int y)
-    {
+    private Case getCase(int x, int y) {
         return casePlateau[x][y];
+    }
+
+    public static void generationMap(int m, int n)
+    {
+    generationPlateau = new int[m][n];
+    File file = new File("src/ressources/mapGeneration.txt");
+        try {
+            Scanner sc = new Scanner(file);
+            sc.useDelimiter(",");
+            for(int i=0; i<m;i++)
+            {
+                for(int j=0; j<n;j++)
+                {
+                    generationPlateau[i][j] = sc.nextInt();
+                }
+               sc.nextLine();
+            }
+
+            sc.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        createMap(m,n);
     }
 
     public static void createMap(int m, int n)
@@ -41,11 +65,31 @@ public class Plateau extends JPanel{
         {
             for(int j=0; j<n;j++)
             {
-                casePlateau[i][j] = new Route(x,y);
-                x += 100;
+                switch(generationPlateau[i][j])
+                {
+                    case 0:
+                        casePlateau[i][j] = new CaseGrise(x,y);
+                        break;
+                    case 1:
+                        casePlateau[i][j] = new Trottoir(x,y);
+                        break;
+                    case 2:
+                        casePlateau[i][j] = new Route(x,y);
+                        break;
+                    case 3:
+                        casePlateau[i][j] = new Foret(x,y);
+                        break;
+                    case 4:
+                        casePlateau[i][j] = new EtendueEau(x,y);
+                        break;
+                    case 5:
+                        casePlateau[i][j] = new Bibliotheque(x,y);
+                        break;
+                }
+                x += 30;
             }
             x=0;
-            y+=100;
+            y+=30;
         }
 
     }
@@ -56,28 +100,25 @@ public class Plateau extends JPanel{
         {
             for(Case y : i)
             {
-                try {
-                    image = ImageIO.read(new File("src/img/"+y.getClass().getSimpleName()+".png"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                drawCase(g,y.getx(), y.gety());
-                g.drawImage(image, y.getx(), y.gety(), 100, 100, null);
+                g.drawImage(y.getImage(), y.getx(), y.gety(), 30, 30, null);
             }
         }
     }
 
+    /*
     private void drawCase(Graphics g, int x, int y) {
         Graphics2D g2d = (Graphics2D) g;
         Dimension size = getSize();
         double w = size.getWidth();
         double h = size.getHeight();
 
-        Rectangle2D e = new Rectangle2D.Double(x, y, 100,100);
+        Rectangle2D e = new Rectangle2D.Double(x, y, 30,30);
         g2d.setStroke(new BasicStroke(1));
         g2d.setColor(Color.black);
         g2d.draw(e);
     }
+    */
+
 
 
 }

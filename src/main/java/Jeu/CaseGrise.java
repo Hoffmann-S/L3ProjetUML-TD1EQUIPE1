@@ -2,16 +2,14 @@ package Jeu;
 
 import javax.imageio.ImageIO;
 import java.io.File;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 
-public class Route extends Case{
+public class CaseGrise extends Case {
 
 
     {
         try {
-            image = ImageIO.read(new File("src/img/Route.png"));
+            image = ImageIO.read(new File("src/img/CaseGrise.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -19,7 +17,7 @@ public class Route extends Case{
 
     ;
 
-    public Route(int x, int y) {
+    public CaseGrise(int x, int y) {
         super(x, y);
     }
 }
