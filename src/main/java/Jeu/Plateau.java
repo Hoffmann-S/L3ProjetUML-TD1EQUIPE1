@@ -1,10 +1,5 @@
 package Jeu;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.geom.Rectangle2D;
-import java.awt.Graphics2D;
+import java.awt.*;
 import javax.swing.JPanel;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -16,6 +11,16 @@ import java.util.Scanner;
 
 public class Plateau extends JPanel {
 
+    public static boolean inGame = true;
+    static Personnage p;
+    private BufferedImage imagePersonnage;
+    {
+        try {
+            imagePersonnage = ImageIO.read(new File("src/img/steve.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private BufferedImage image;
     static Plateau uniqueInstance = new Plateau();
     public static int[][] generationPlateau;
@@ -32,6 +37,7 @@ public class Plateau extends JPanel {
     private Case getCase(int x, int y) {
         return casePlateau[x][y];
     }
+
 
     public static void generationMap(int m, int n)
     {
@@ -68,7 +74,7 @@ public class Plateau extends JPanel {
                 switch(generationPlateau[i][j])
                 {
                     case 0:
-                        casePlateau[i][j] = new CaseGrise(x,y);
+                        casePlateau[i][j] = new Case(x,y, false);
                         break;
                     case 1:
                         casePlateau[i][j] = new Trottoir(x,y);
@@ -85,6 +91,9 @@ public class Plateau extends JPanel {
                     case 5:
                         casePlateau[i][j] = new Bibliotheque(x,y);
                         break;
+                    case 6:
+                        casePlateau[i][j] = new FastFood(x,y);
+                        break;
                 }
                 x += 30;
             }
@@ -94,31 +103,47 @@ public class Plateau extends JPanel {
 
     }
 
+    public boolean checkIsValid(int x, int y)
+    {
+        if(casePlateau[y][x].getIsValid())
+            return true;
+        else
+            return false;
+    }
+
+    public void updateContainPlayer(int x, int y, boolean b)
+    {
+        Plateau.casePlateau[y][x].setContainPlayer(b);
+    }
+
     public void paintComponent(Graphics g) {
 
-        for(Case[] i : casePlateau)
-        {
-            for(Case y : i)
-            {
-                g.drawImage(y.getImage(), y.getx(), y.gety(), 30, 30, null);
+        if(inGame) {
+            for (Case[] i : casePlateau) {
+                for (Case y : i) {
+                    if (!y.getContainPlayer())
+                        g.drawImage(y.getImage(), y.getx(), y.gety(), 30, 30, null);
+                    else {
+                        g.drawImage(imagePersonnage, y.getx(), y.gety(), 30, 30, null);
+                    }
+                }
             }
+            Toolkit.getDefaultToolkit().sync();
+        }
+        else{
+            gameOver(g);
         }
     }
 
-    /*
-    private void drawCase(Graphics g, int x, int y) {
-        Graphics2D g2d = (Graphics2D) g;
-        Dimension size = getSize();
-        double w = size.getWidth();
-        double h = size.getHeight();
+    private void gameOver(Graphics g) {
 
-        Rectangle2D e = new Rectangle2D.Double(x, y, 30,30);
-        g2d.setStroke(new BasicStroke(1));
-        g2d.setColor(Color.black);
-        g2d.draw(e);
+        String msg = "Game Over";
+        Font small = new Font("Helvetica", Font.BOLD, 14);
+        FontMetrics metr = getFontMetrics(small);
+
+        g.setColor(Color.white);
+        g.setFont(small);
+        g.drawString(msg, (950 - metr.stringWidth(msg)) / 2, 1200 / 2);
     }
-    */
-
-
 
 }

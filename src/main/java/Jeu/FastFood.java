@@ -6,7 +6,7 @@ public class FastFood extends Batiment{
         super(x, y);
     }
 
-    public void Manger()
+    public void Manger(Personnage p)
     {
 
     }
