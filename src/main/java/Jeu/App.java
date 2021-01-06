@@ -3,12 +3,15 @@ import java.awt.*;
 import javax.swing.JFrame;
 import java.util.Scanner;
 
+
 public class App extends JFrame {
 
 
     public App(){
         initUI();
     }
+
+
     public void initUI() {
         addKeyListener(new TAdapter());
         add(Plateau.getInstance());
