@@ -8,7 +8,7 @@ public class Hippie extends Personnage{
     }
 
     @Override
-    public void checkBarre() {
+    public void checkBarre() { //cette verification permet d'établir une limite sur les statistiques
         if(satiete > 100)
             satiete = 100;
         if(soif > 100)
@@ -21,7 +21,7 @@ public class Hippie extends Personnage{
     }
 
     public void seDeplacer(Plateau plateau, String direction) {
-        if(Deplacement(plateau, direction)) {
+        if(Deplacement(plateau, direction)) { //si le déplacement s'est bien éffectué alors retrait des points
             this.vie -= 2;
             this.satiete -= 2;
             this.soif -= 2;
@@ -29,6 +29,6 @@ public class Hippie extends Personnage{
         this.checkMort();
         this.checkBarre();
 
-        Plateau.getInstance().repaint();
+        Plateau.getInstance().repaint(); //permet de mettre à jour l'affichage
     }
 }

@@ -7,7 +7,7 @@ public class Standard extends Personnage{
     }
 
     @Override
-    public void checkBarre() {
+    public void checkBarre() { //cette verification permet d'établir une limite sur les statistiques
         if(satiete > 150)
             satiete = 150;
         if(soif > 150)
@@ -21,7 +21,7 @@ public class Standard extends Personnage{
     }
 
     public void seDeplacer(Plateau plateau, String direction) {
-        if(Deplacement(plateau, direction)) {
+        if(Deplacement(plateau, direction)) {  //si le déplacement s'est bien éffectué alors retrait des points
             this.vie -= 1;
             this.moral -= 1;
             this.satiete -= 1;
@@ -29,6 +29,6 @@ public class Standard extends Personnage{
         }
         this.checkMort();
         this.checkBarre();
-        Plateau.getInstance().repaint();
+        Plateau.getInstance().repaint(); //permet de mettre à jour l'affichage
     }
 }
