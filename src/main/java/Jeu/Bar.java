@@ -22,11 +22,11 @@ public class Bar extends Batiment{
         p.soif += 25;
         p.moral += 10;
         p.vie -= 3;
-        if (Math.random() < 0.05) {
+        if (Math.random() < 0.05) { // Probabilité de 5% (probabilité de 0.05 ou moins sur un chiffre généré entre 0 et 1
             p.pourcentageDiplome += 5;
             System.out.println("Vous avez trouvé le sujet de l'éxamen! +5% de chance d'avoir un diplôme");
         }
-        if (!(p instanceof Hippie) && !p.haveSwimsuit) {
+        if (!(p instanceof Hippie) && !p.haveSwimsuit) { //Si le personnage est hippie alors il ne peux pas avoir le maillot de bain
             System.out.println("vous avez obtenu un maillot de bain!");
             p.haveSwimsuit = true;
         }

@@ -13,10 +13,10 @@ public class App extends JFrame {
 
 
     public void initUI() {
-        addKeyListener(new TAdapter());
-        add(Plateau.getInstance());
+        addKeyListener(new TAdapter()); //Ajout du détecteur d'appuis sur touche de clavier
+        add(Plateau.getInstance()); //Ajout du plateau sur l'interface
 
-        setSize(950, 1200);
+        setSize(950, 1000);
         setTitle("Simulation");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -24,20 +24,20 @@ public class App extends JFrame {
 
     public static void choixUtilisateur()
     {
-        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+        Scanner myObj = new Scanner(System.in);  // Creation d'un objet scanner pour détecter les inputs
         String Pseudo;
         System.out.println("Choissisez pseudo:");
         Pseudo = myObj.nextLine();
         System.out.println("Choissisez personnage:");
         switch(myObj.nextInt())
         {
-            case 0:
+            case 0: // Standard
                 Plateau.p = new Standard(Pseudo);
                 break;
-            case 1:
+            case 1: // Hippie
                 Plateau.p = new Hippie(Pseudo);
                 break;
-            case 2:
+            case 2: // Homme presse
                 Plateau.p = new HommePresse(Pseudo);
                 break;
         }

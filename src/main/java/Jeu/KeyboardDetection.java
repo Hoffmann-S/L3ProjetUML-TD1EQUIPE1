@@ -8,7 +8,7 @@ class TAdapter extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent e) {
 
-        int key = e.getKeyCode();
+        int key = e.getKeyCode(); //récuperation du code de la touché pressée
 
         if (key == KeyEvent.VK_LEFT) {
             Plateau.p.seDeplacer(Plateau.getInstance(), "Gauche");

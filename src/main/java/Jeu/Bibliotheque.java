@@ -23,7 +23,7 @@ public class Bibliotheque extends Batiment {
     public static void trouverLivre(Personnage p)
     {
         p.moral += 20;
-        if (Math.random() < 0.05)
+        if (Math.random() < 0.05)  // Probabilité de 5% (probabilité de 0.05 ou moins sur un chiffre généré entre 0 et 1
         {
             System.out.println("Vous avez trouvez un livre sur le génie logiciel! +10% de chance d'obtenir un diplome");
             p.pourcentageDiplome += 10;
