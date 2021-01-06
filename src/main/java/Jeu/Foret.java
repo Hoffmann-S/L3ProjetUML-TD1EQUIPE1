@@ -19,8 +19,11 @@ public class Foret extends Case{
         super(x, y);
     }
 
-    public void tomberMalade()
+    public static void tomberMalade(Personnage p)
     {
-
+        if (Math.random() < 0.1) {
+            p.vie -= 10;
+            System.out.println("Vous êtes tomber malade!");
+        }
     }
 }

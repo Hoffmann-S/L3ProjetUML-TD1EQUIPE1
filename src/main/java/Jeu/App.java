@@ -12,6 +12,7 @@ public class App extends JFrame {
     public void initUI() {
         addKeyListener(new TAdapter());
         add(Plateau.getInstance());
+
         setSize(950, 1200);
         setTitle("Simulation");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

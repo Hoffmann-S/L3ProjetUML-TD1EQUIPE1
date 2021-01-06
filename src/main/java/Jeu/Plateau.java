@@ -1,6 +1,6 @@
 package Jeu;
 import java.awt.*;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 
 public class Plateau extends JPanel {
+
 
     public static boolean inGame = true;
     static Personnage p;
@@ -27,7 +28,6 @@ public class Plateau extends JPanel {
     public static Case[][] casePlateau;
 
     private Plateau() {
-
     }
 
     public static Plateau getInstance() {
@@ -94,21 +94,27 @@ public class Plateau extends JPanel {
                     case 6:
                         casePlateau[i][j] = new FastFood(x,y);
                         break;
+                    case 7:
+                        casePlateau[i][j] = new Bar(x,y);
+                        break;
+                    case 8:
+                        casePlateau[i][j] = new Universite(x,y);
+                        break;
+                    case 9:
+                        casePlateau[i][j] = new Maison(x,y);
+                        break;
                 }
                 x += 30;
             }
             x=0;
             y+=30;
         }
-
+        casePlateau[22][21].setContainPlayer(true);
     }
 
     public boolean checkIsValid(int x, int y)
     {
-        if(casePlateau[y][x].getIsValid())
-            return true;
-        else
-            return false;
+        return casePlateau[y][x].getIsValid();
     }
 
     public void updateContainPlayer(int x, int y, boolean b)
@@ -117,7 +123,12 @@ public class Plateau extends JPanel {
     }
 
     public void paintComponent(Graphics g) {
-
+        g.clearRect (0, 0, 300, 50);
+        g.drawString("Santé: " + p.vie, 10, 10);
+        g.drawString("Satiete: " + p.satiete, 10, 30);
+        g.drawString("Soif: " + p.soif, 10, 50);
+        g.drawString("Moral: " + p.moral, 100, 10);
+        g.drawString("Nb de diplome: " + Personnage.getNbdiplome(), 100, 30);
         if(inGame) {
             for (Case[] i : casePlateau) {
                 for (Case y : i) {
@@ -128,7 +139,7 @@ public class Plateau extends JPanel {
                     }
                 }
             }
-            Toolkit.getDefaultToolkit().sync();
+
         }
         else{
             gameOver(g);
@@ -137,13 +148,17 @@ public class Plateau extends JPanel {
 
     private void gameOver(Graphics g) {
 
+        g.clearRect (0, 0, 950, 1200);
         String msg = "Game Over";
-        Font small = new Font("Helvetica", Font.BOLD, 14);
+        int score = Personnage.getNbdiplome();
+        Font small = new Font("Helvetica", Font.BOLD, 40);
         FontMetrics metr = getFontMetrics(small);
 
-        g.setColor(Color.white);
+        g.setColor(Color.black);
         g.setFont(small);
-        g.drawString(msg, (950 - metr.stringWidth(msg)) / 2, 1200 / 2);
+        g.drawString(msg, (950 - metr.stringWidth(msg)) / 2, 500);
+        g.drawString("Vous avez obtenu " + String.valueOf(score) + " diplome.", (500 - metr.stringWidth(msg)) / 2, 600 );
+
     }
 
 }

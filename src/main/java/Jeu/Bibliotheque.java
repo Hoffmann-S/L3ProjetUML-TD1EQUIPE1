@@ -20,8 +20,13 @@ public class Bibliotheque extends Batiment {
         super(x, y);
     }
 
-    public void trouverLivre()
+    public static void trouverLivre(Personnage p)
     {
-
+        p.moral += 20;
+        if (Math.random() < 0.05)
+        {
+            System.out.println("Vous avez trouvez un livre sur le génie logiciel! +10% de chance d'obtenir un diplome");
+            p.pourcentageDiplome += 10;
+        }
     }
 }

@@ -5,8 +5,8 @@ public abstract class Personnage {
     /**
      * position du personnage
      */
-    protected static int PositionY = 5;
-    protected static int PositionX = 1;
+    protected static int PositionY = 22;
+    protected static int PositionX = 21;
     private String pseudo;
 
     public String getPseudo() {
@@ -29,7 +29,7 @@ public abstract class Personnage {
         return moral;
     }
 
-    public int getNbdiplome() {
+    public static int getNbdiplome() {
         return nbdiplome;
     }
 
@@ -61,7 +61,10 @@ public abstract class Personnage {
     protected int satiete;
     protected int soif;
     protected int moral;
-    protected int nbdiplome;
+    protected static int nbdiplome;
+    protected boolean haveSwimsuit;
+    protected boolean havePermis;
+    protected double pourcentageDiplome;
 
     public Personnage(String pseudo, int vie, int satiete, int soif, int moral)
     {
@@ -70,6 +73,9 @@ public abstract class Personnage {
         this.satiete = satiete;
         this.soif = soif;
         this.moral = moral;
+        this.haveSwimsuit = false;
+        this.havePermis = false;
+        this.pourcentageDiplome = 30;
     }
 
     private static int getPositionX()
@@ -92,47 +98,129 @@ public abstract class Personnage {
         PositionX = y;
     }
 
-    private void checkMort()
+    void checkMort()
     {
-        if(satiete == 0 || soif == 0 || vie == 0 || moral == 0)
+        if(satiete <= 0 || soif <= 0 || vie <= 0 || moral <= 0)
             Plateau.inGame = false;
+
     }
 
-    public void seDeplacer(Plateau plateau, String direction) {
-                checkMort();
-                System.out.println(vie);
-                switch(direction)
+    public abstract void checkBarre();
+
+    public void checkCase(Case c)
+    {
+        if(c instanceof Foret)
+            Foret.tomberMalade(this);
+        else if(c instanceof Maison)
+            Maison.ressourcerPersonnage(this);
+        else if(c instanceof Bibliotheque)
+            Bibliotheque.trouverLivre(this);
+        else if(c instanceof FastFood)
+            FastFood.Manger(this);
+        else if(c instanceof Universite)
+            Universite.obtenirDiplome(this);
+        else if(c instanceof Bar)
+            Bar.Boire(this);
+        else if(c instanceof Trottoir)
+        {
+            if(Math.random()<0.05)
+            {
+                double random = Math.random();
+                if(random<0.33)
                 {
-                    case "Gauche":
-                        if(plateau.checkIsValid(PositionX-1, PositionY)) {
-                            Plateau.getInstance().updateContainPlayer(PositionX, PositionY, false);
-                            PositionX -= 1;
-                            Plateau.getInstance().updateContainPlayer(PositionX, PositionY, true);
-                        }
-                        break;
-                    case "Droite":
-                        if(plateau.checkIsValid(PositionX+1, PositionY)) {
-                            Plateau.getInstance().updateContainPlayer(PositionX, PositionY, false);
-                            PositionX += 1;
-                            Plateau.getInstance().updateContainPlayer(PositionX, PositionY, true);
-                        }
-                        break;
-                    case "Haut":
-                        if(plateau.checkIsValid(PositionX, PositionY-1)) {
-                            Plateau.getInstance().updateContainPlayer(PositionX, PositionY, false);
-                            PositionY -= 1;
-                            Plateau.getInstance().updateContainPlayer(PositionX, PositionY, true);
-                        }
-                        break;
-                    case "Bas":
-                        if(plateau.checkIsValid(PositionX, PositionY+1)) {
-                            Plateau.getInstance().updateContainPlayer(PositionX, PositionY, false);
-                            PositionY += 1;
-                            Plateau.getInstance().updateContainPlayer(PositionX, PositionY, true);
-                        }
-                        break;
+                    vie -= 3;
+                    System.out.println("Peau de banane!");
                 }
-                Plateau.getInstance().repaint();
+                else if(random>0.33 && random <0.66)
+                {
+                    moral -= 2;
+                    System.out.println("Poussette!");
+                }
+                else
+                {
+                    satiete -= 1;
+                    System.out.println("Déjection canine!");
+                }
             }
+        }
+        else if(c instanceof Route)
+        {
+            if(Math.random()<0.05)
+            {
+                double random = Math.random();
+                if(random<0.33)
+                {
+                    vie -= 1;
+                    System.out.println("Feu Rouge!");
+                }
+                else if(random>0.33 && random <0.66)
+                {
+                    moral -= 1;
+                    System.out.println("Police!");
+                }
+                else
+                {
+                    satiete -= 2;
+                    soif -= 2;
+                    System.out.println("Nid de poule!");
+                }
+            }
+        }
+    }
+
+    public boolean Deplacement(Plateau plateau, String direction)
+    {
+        boolean b = false;
+
+        switch(direction)
+        {
+            case "Gauche":
+                if(Plateau.getInstance().casePlateau[PositionY][PositionX-1] instanceof EtendueEau && haveSwimsuit == false)
+                    b = false;
+
+                else if(plateau.checkIsValid(PositionX-1, PositionY)) {
+                    Plateau.getInstance().updateContainPlayer(PositionX, PositionY, false);
+                    PositionX -= 1;
+                    Plateau.getInstance().updateContainPlayer(PositionX, PositionY, true);
+                    b = true;
+                }
+                break;
+            case "Droite":
+                if(Plateau.getInstance().casePlateau[PositionY][PositionX+1] instanceof EtendueEau && haveSwimsuit == false)
+                    b = false;
+                else if(plateau.checkIsValid(PositionX+1, PositionY)) {
+                    Plateau.getInstance().updateContainPlayer(PositionX, PositionY, false);
+                    PositionX += 1;
+                    Plateau.getInstance().updateContainPlayer(PositionX, PositionY, true);
+                    b = true;
+                }
+                break;
+
+            case "Haut":
+                if(Plateau.getInstance().casePlateau[PositionY-1][PositionX] instanceof EtendueEau && haveSwimsuit == false)
+                    b = false;
+                else if(plateau.checkIsValid(PositionX, PositionY-1)) {
+                    Plateau.getInstance().updateContainPlayer(PositionX, PositionY, false);
+                    PositionY -= 1;
+                    Plateau.getInstance().updateContainPlayer(PositionX, PositionY, true);
+                    b = true;
+                }
+                break;
+            case "Bas":
+                if(Plateau.getInstance().casePlateau[PositionY+1][PositionX] instanceof EtendueEau && haveSwimsuit == false)
+                    b = false;
+                else if(plateau.checkIsValid(PositionX, PositionY+1)) {
+                    Plateau.getInstance().updateContainPlayer(PositionX, PositionY, false);
+                    PositionY += 1;
+                    Plateau.getInstance().updateContainPlayer(PositionX, PositionY, true);
+                    b = true;
+                }
+                break;
+        }
+        checkCase(Plateau.getInstance().casePlateau[PositionY][PositionX]);
+        return b;
+    }
+
+    public abstract void seDeplacer(Plateau plateau, String direction);
 
 }
