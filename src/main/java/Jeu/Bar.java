@@ -26,7 +26,7 @@ public class Bar extends Batiment{
             p.pourcentageDiplome += 5;
             System.out.println("Vous avez trouvé le sujet de l'éxamen! +5% de chance d'avoir un diplôme");
         }
-        if (!(p instanceof Hippie) && !p.haveSwimsuit) { //Si le personnage est hippie alors il ne peux pas avoir le maillot de bain
+        if (!p.haveSwimsuit) {
             System.out.println("vous avez obtenu un maillot de bain!");
             p.haveSwimsuit = true;
         }

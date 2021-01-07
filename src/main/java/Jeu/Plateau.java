@@ -15,9 +15,11 @@ public class Plateau extends JPanel { //classe Singleton
     public static boolean inGame = true; //variable si game over ou non
     static Personnage p; //le personnage instancié au début du jeu
     private BufferedImage imagePersonnage; //image du personnage
+    private BufferedImage imageVoiture; //image de la voiture
     {
         try {
             imagePersonnage = ImageIO.read(new File("src/img/steve.png"));
+            imageVoiture = ImageIO.read(new File("src/img/Voiture.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,7 +137,10 @@ public class Plateau extends JPanel { //classe Singleton
                 for (Case y : i) {
                     if (!y.getContainPlayer()) //Si la case de contiens pas le joueur
                         g.drawImage(y.getImage(), y.getx(), y.gety(), 30, 30, null); // On affiche la case et son image associé
-                    else {
+                    else if(y.getContainPlayer() && y instanceof Route) {
+                        g.drawImage(imageVoiture, y.getx(), y.gety(), 30, 30, null); // Sinon on affiche le joueur
+                    }
+                    else{
                         g.drawImage(imagePersonnage, y.getx(), y.gety(), 30, 30, null); // Sinon on affiche le joueur
                     }
                 }

@@ -168,6 +168,7 @@ public abstract class Personnage { //classe abtraite car personnage ne peut pas 
     public boolean Deplacement(Plateau plateau, String direction) /*déplacement est une méthode différente de seDéplacer, elle permet juste de mettre à jour la position du personnage
     en renvoyant un boolean si le déplacement s'est bien éffectué. Cela évite de perde des points de vie si le déplacement échoue.*/
     {
+
         boolean b = false;
 
         switch(direction)
@@ -215,6 +216,8 @@ public abstract class Personnage { //classe abtraite car personnage ne peut pas 
                 }
                 break;
         }
+
+
         checkCase(Plateau.getInstance().casePlateau[PositionY][PositionX]); //check la case actuelle pour application des bonus/malus.
         return b;
     }
